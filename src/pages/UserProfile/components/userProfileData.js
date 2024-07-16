@@ -14,11 +14,11 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Drawer
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
 
 const ProfileCard = styled(Card)(({ theme }) => ({
   maxWidth: 935,
@@ -110,6 +110,7 @@ const UserProfileData = ({ userId }) => {
   const [followersOpen, setFollowersOpen] = useState(false);
   const [followingOpen, setFollowingOpen] = useState(false);
   const myId = useSelector((state) => state.auth.user._id);
+  const navigate=useNavigate();
 
   const followUser = async () => {
     try {
@@ -166,6 +167,7 @@ const UserProfileData = ({ userId }) => {
     setFollowingOpen(!followingOpen);
   };
 
+
   return (
     <Box sx={{ padding: 0, width: "100%"}}>
       <ProfileCard>
@@ -213,7 +215,7 @@ const UserProfileData = ({ userId }) => {
           <List>
             {followersList && followersList.map((follower) => (
               <ListItem key={follower._id} sx={{ gap: 1 }}>
-                <Avatar src={follower.followerId.profilePicture} alt={follower.followerId.username} />
+                <Avatar src={follower.followerId.profilePicture} alt={follower.followerId.username} onClick={()=>{navigate(`/post-view?postId=${follower.followerId._id}`)}}/>
                 <ListItemText primary={follower.followerId.username} />
               </ListItem>
             ))}
@@ -233,7 +235,7 @@ const UserProfileData = ({ userId }) => {
           <List>
             {followingList && followingList.map((following) => (
               <ListItem key={following._id} sx={{ gap: 1 }}>
-                <Avatar src={following.followingId.profilePicture} alt={following.followingId.username} />
+                <Avatar src={following.followingId.profilePicture} alt={following.followingId.username} onClick={()=>{navigate(`/post-view?postId=${following.followingId._id}`)}}/>
                 <ListItemText primary={following.followingId.username} />
               </ListItem>
             ))}

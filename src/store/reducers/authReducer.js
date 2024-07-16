@@ -29,7 +29,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: false,
-        loading: false, // Set loading to false on logout
+        loading: false,
         user: null,
         error: null
       };

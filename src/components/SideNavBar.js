@@ -16,20 +16,31 @@ import { useMediaQuery } from "@mui/material";
 import GetUser from "./SearchUser";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const drawerWidth = 240;
-const iconWidth = 80; 
+const iconWidth = 80;
 
 const SideNavBar = () => {
   const isSmallScreen = useMediaQuery("(max-width:768px)");
   const isVerySmallScreen = useMediaQuery("(max-width:600px)");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const navigate=useNavigate();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State for settings drawer
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleLogout = () => {
+    // Dispatch logout action here
+    dispatch({ type: 'LOGOUT' });
+  };
+
+  const handleSettingsClick = () => {
+    setIsSettingsOpen(!isSettingsOpen); // Toggle settings drawer
   };
 
   return (
@@ -62,20 +73,34 @@ const SideNavBar = () => {
             display: "flex",
             flexDirection: isVerySmallScreen ? "row" : "column",
             padding: 0,
-            justifyContent: isVerySmallScreen ? "space-around" : "flex-start",
+            justifyContent: isVerySmallScreen
+              ? "space-around"
+              : "flex-start",
             height: "100%",
           }}
         >
           {[
-            { icon: <HomeIcon />, label: "Home",onClick:()=>navigate('/') },
+            { icon: <HomeIcon />, label: "Home", onClick: () => navigate('/') },
             {
               icon: <SearchIcon />,
               label: "Search",
               onClick: handleSearchClick,
             },
-            { icon: <AddCircleIcon />, label: "Create", onClick:()=>navigate('/create-post') },
-            { icon: <PersonIcon />, label: "Profile",onClick:()=>navigate(`/userProfile?userId=${user?._id}`)  },
-            { icon: <SettingsIcon />, label: "Settings" },
+            {
+              icon: <AddCircleIcon />,
+              label: "Create",
+              onClick: () => navigate('/create-post'),
+            },
+            {
+              icon: <PersonIcon />,
+              label: "Profile",
+              onClick: () => navigate(`/userProfile?userId=${user?._id}`),
+            },
+            {
+              icon: <SettingsIcon />,
+              label: "Settings",
+              onClick: handleSettingsClick, // Toggle settings drawer
+            },
           ].map(({ icon, label, onClick }, index) => (
             <ListItem
               button
@@ -124,14 +149,31 @@ const SideNavBar = () => {
               height: isVerySmallScreen ? "100vh" : "100%",
               width: isVerySmallScreen ? "100%" : 320,
               boxShadow: "none",
-              borderRight: isVerySmallScreen ? "none" : "1px solid #e2e3e5",
-              borderBottom: isVerySmallScreen ? "1px solid #e2e3e5" : "none",
+              borderRight: isVerySmallScreen
+                ? "none"
+                : "1px solid #e2e3e5",
+              borderBottom: isVerySmallScreen
+                ? "1px solid #e2e3e5"
+                : "none",
               background: "#fff",
               zIndex: 900,
             }}
           >
             <GetUser />
           </motion.div>
+        )}
+        {isSettingsOpen && (
+          <Drawer
+            anchor="right"
+            open={isSettingsOpen}
+            onClose={handleSettingsClick} 
+          >
+            <List>
+              <ListItem onClick={handleLogout}>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            </List>
+          </Drawer>
         )}
       </AnimatePresence>
     </Box>

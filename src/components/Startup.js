@@ -10,8 +10,8 @@ const StartupContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
-  backgroundColor: "#1a1a1a",
-  color: "#fff",
+  backgroundColor: "white",
+  color: "black",
 }));
 
 const animationVariants = {

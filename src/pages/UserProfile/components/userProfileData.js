@@ -215,7 +215,7 @@ const UserProfileData = ({ userId }) => {
           <List>
             {followersList && followersList.map((follower) => (
               <ListItem key={follower._id} sx={{ gap: 1 }}>
-                <Avatar src={follower.followerId.profilePicture} alt={follower.followerId.username} onClick={()=>{navigate(`/post-view?postId=${follower.followerId._id}`)}}/>
+                <Avatar src={follower.followerId.profilePicture} alt={follower.followerId.username} onClick={()=>{navigate(`/userProfile?userId=${follower.followerId._id}`)}}/>
                 <ListItemText primary={follower.followerId.username} />
               </ListItem>
             ))}
@@ -235,7 +235,7 @@ const UserProfileData = ({ userId }) => {
           <List>
             {followingList && followingList.map((following) => (
               <ListItem key={following._id} sx={{ gap: 1 }}>
-                <Avatar src={following.followingId.profilePicture} alt={following.followingId.username} onClick={()=>{navigate(`/post-view?postId=${following.followingId._id}`)}}/>
+                <Avatar src={following.followingId.profilePicture} alt={following.followingId.username} onClick={()=>{navigate(`/userProfile?userId=${following.followingId._id}`)}}/>
                 <ListItemText primary={following.followingId.username} />
               </ListItem>
             ))}

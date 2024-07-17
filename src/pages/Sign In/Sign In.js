@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from "../../store/actions/authActions";
-
+import { Link } from "react-router-dom";
 
 const SigninForm = () => {
   const dispatch = useDispatch();
@@ -41,6 +41,10 @@ const SigninForm = () => {
               <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                 Submit
               </button>
+              <div className="mt-3 text-center">
+                <span>Don't have an account? </span>
+                <Link to="/signup" className="text-primary">Sign Up</Link>
+              </div>
             </Form>
           )}
         </Formik>

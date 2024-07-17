@@ -5,6 +5,7 @@ import {
   Box,
   Grid,
   Avatar,
+  CircularProgress,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -18,10 +19,12 @@ const UpdateProfileForm = () => {
   });
   const [profilePicturePreview, setProfilePicturePreview] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_API_URL}/api/users/getUserById/${profile?._id}`
         );
@@ -34,6 +37,8 @@ const UpdateProfileForm = () => {
         setProfilePicturePreview(user.profilePicture);
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -72,6 +77,7 @@ const UpdateProfileForm = () => {
     e.preventDefault();
     if (validate()) {
       try {
+        setLoading(true);
         const formDataToSend = new FormData();
         formDataToSend.append("username", formData.username);
         formDataToSend.append("profilePicture", formData.profilePicture);
@@ -90,13 +96,20 @@ const UpdateProfileForm = () => {
         console.log("Profile updated successfully");
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', mt: '20px' }}>
-      <form onSubmit={handleSubmit} style={{margin:"20px"}}>
+      <form onSubmit={handleSubmit} style={{margin:"20px", maxWidth: '500px', width: '100%' }}>
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
         <Grid container spacing={2}>
           <Grid
             item
@@ -155,7 +168,7 @@ const UpdateProfileForm = () => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={!formData.username}
+              disabled={loading || !formData.username}
             >
               Update
             </Button>

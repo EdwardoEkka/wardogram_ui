@@ -35,7 +35,7 @@ const UserProfileFeed = () => {
       {userId && (
         <>
           <Box sx={{ width: '100%', maxWidth: '935px' }}>
-            <UserProfileData userId={userId} />
+            <UserProfileData userId={userId} isCurrentUser={isCurrentUser}/>
           </Box>
           <Box sx={{ width: '100%', maxWidth: '935px' }}>
             <UserPostFeed userId={userId} isCurrentUser={isCurrentUser}/>

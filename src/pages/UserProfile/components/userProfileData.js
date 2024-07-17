@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSelector } from "react-redux";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 
 const ProfileCard = styled(Card)(({ theme }) => ({
@@ -26,7 +26,7 @@ const ProfileCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
   display: "flex",
   flexDirection: "column",
-  margin:"auto"
+  margin: "auto",
 }));
 
 const FollowAvatarWrapper = styled(Box)(({ theme }) => ({
@@ -42,7 +42,7 @@ const FollowDataWrapper = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   gap: theme.spacing(2),
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down("sm")]: {
     width: "100%",
     justifyContent: "space-around",
   },
@@ -52,7 +52,7 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   width: 70,
   height: 70,
   marginRight: theme.spacing(3),
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up("sm")]: {
     width: 100,
     height: 100,
   },
@@ -86,19 +86,19 @@ const FollowStatsItem = styled(Box)(({ theme }) => ({
 }));
 
 const DialogHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
 }));
 
 const DialogContentWrapper = styled(DialogContent)(({ theme }) => ({
   minWidth: "300px",
   flexGrow: 1,
-  overflowY: 'auto',
+  overflowY: "auto",
   marginBottom: theme.spacing(6),
 }));
 
-const UserProfileData = ({ userId }) => {
+const UserProfileData = ({ userId, isCurrentUser }) => {
   const [userData, setUserData] = useState(null);
   const [followers, setFollowers] = useState(0);
   const [followings, setFollowings] = useState(0);
@@ -110,12 +110,18 @@ const UserProfileData = ({ userId }) => {
   const [followersOpen, setFollowersOpen] = useState(false);
   const [followingOpen, setFollowingOpen] = useState(false);
   const myId = useSelector((state) => state.auth.user._id);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const followUser = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API_URL}/api/follow/followUser`, { userId: myId, followingId: userId });
-      await axios.post(`${process.env.REACT_APP_BASE_API_URL}/api/follow/addToFollowerList`, { userId, followerId: myId });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/api/follow/followUser`,
+        { userId: myId, followingId: userId }
+      );
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/api/follow/addToFollowerList`,
+        { userId, followerId: myId }
+      );
       fetchData();
     } catch (error) {
       console.error("Error:", error);
@@ -124,13 +130,34 @@ const UserProfileData = ({ userId }) => {
 
   const fetchData = async () => {
     try {
-      const [userRes, postsRes, followersRes, followingsRes, isFollowerRes, isFollowingRes] = await Promise.all([
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/users/getUserById/${userId}`),
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/posts/getUserPosts/${userId}`),
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/follow/followers/${userId}`),
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/follow/followings/${userId}`),
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/follow/isFollower`, { params: { userId: myId, followerId: userId } }),
-        axios.get(`${process.env.REACT_APP_BASE_API_URL}/api/follow/isFollowing`, { params: { userId: myId, followingId: userId } }),
+      const [
+        userRes,
+        postsRes,
+        followersRes,
+        followingsRes,
+        isFollowerRes,
+        isFollowingRes,
+      ] = await Promise.all([
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/users/getUserById/${userId}`
+        ),
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/posts/getUserPosts/${userId}`
+        ),
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/follow/followers/${userId}`
+        ),
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/follow/followings/${userId}`
+        ),
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/follow/isFollower`,
+          { params: { userId: myId, followerId: userId } }
+        ),
+        axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/api/follow/isFollowing`,
+          { params: { userId: myId, followingId: userId } }
+        ),
       ]);
       setUserData(userRes.data);
       setPosts(postsRes.data.length);
@@ -149,8 +176,6 @@ const UserProfileData = ({ userId }) => {
     fetchData();
   }, [userId, myId]);
 
-  
-
   if (!userData) {
     return (
       <LoadingBox>
@@ -167,31 +192,57 @@ const UserProfileData = ({ userId }) => {
     setFollowingOpen(!followingOpen);
   };
 
-
   return (
-    <Box sx={{ padding: 0, width: "100%"}}>
+    <Box sx={{ padding: 0, width: "100%" }}>
       <ProfileCard>
         <FollowAvatarWrapper>
-          <ProfileAvatar alt={userData.username} src={userData.profilePicture} />
+          <ProfileAvatar
+            alt={userData.username}
+            src={userData.profilePicture}
+          />
           <FollowDataWrapper>
             <FollowStatsBox>
               {["Posts", "Followers", "Following"].map((label, index) => (
                 <FollowStatsItem key={label}>
-                  <Typography variant="h6">{[posts, followers, followings][index]}</Typography>
-                  <Typography variant="body2" onClick={() => {
-                    if (label === "Followers") {
-                      toggleFollowers();
-                    } else if (label === "Following") {
-                      toggleFollowing();
-                    }
-                  }}>{label}</Typography>
+                  <Typography variant="h6">
+                    {[posts, followers, followings][index]}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    onClick={() => {
+                      if (label === "Followers") {
+                        toggleFollowers();
+                      } else if (label === "Following") {
+                        toggleFollowing();
+                      }
+                    }}
+                  >
+                    {label}
+                  </Typography>
                 </FollowStatsItem>
               ))}
             </FollowStatsBox>
-            <Box>
-              <Button variant="contained" onClick={followUser}>
-                {isFollower ? (isFollowing ? "Following" : "Follow Back") : (isFollowing ? "Following" : "Follow")}
-              </Button>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+              {isCurrentUser ? (
+                <Box sx={{display:"flex",gap:"10px"}}>
+                  <Button variant="outlined" onClick={()=>{navigate('/update-profile')}}>
+                    EDIT
+                  </Button>
+                  <Button variant="outlined">
+                    SHARE PRO..
+                  </Button>
+                </Box>
+              ) : (
+                <Button variant="contained" onClick={followUser}>
+                  {isFollower
+                    ? isFollowing
+                      ? "Following"
+                      : "Follow Back"
+                    : isFollowing
+                    ? "Following"
+                    : "Follow"}
+                </Button>
+              )}
             </Box>
           </FollowDataWrapper>
         </FollowAvatarWrapper>
@@ -202,10 +253,14 @@ const UserProfileData = ({ userId }) => {
           <BioText variant="body1">{userData.bio}</BioText>
         </ContentWrapper>
       </ProfileCard>
-      <Dialog open={followersOpen} onClose={toggleFollowers} aria-labelledby="followers-dialog">
+      <Dialog
+        open={followersOpen}
+        onClose={toggleFollowers}
+        aria-labelledby="followers-dialog"
+      >
         <DialogTitle>
           <DialogHeader>
-            <Typography variant='h6'>Followers</Typography>
+            <Typography variant="h6">Followers</Typography>
             <IconButton onClick={toggleFollowers}>
               <CloseIcon />
             </IconButton>
@@ -213,19 +268,32 @@ const UserProfileData = ({ userId }) => {
         </DialogTitle>
         <DialogContentWrapper>
           <List>
-            {followersList && followersList.map((follower) => (
-              <ListItem key={follower._id} sx={{ gap: 1 }}>
-                <Avatar src={follower.followerId.profilePicture} alt={follower.followerId.username} onClick={()=>{navigate(`/userProfile?userId=${follower.followerId._id}`)}}/>
-                <ListItemText primary={follower.followerId.username} />
-              </ListItem>
-            ))}
+            {followersList &&
+              followersList.map((follower) => (
+                <ListItem key={follower._id} sx={{ gap: 1 }}>
+                  <Avatar
+                    src={follower.followerId.profilePicture}
+                    alt={follower.followerId.username}
+                    onClick={() => {
+                      navigate(
+                        `/userProfile?userId=${follower.followerId._id}`
+                      );
+                    }}
+                  />
+                  <ListItemText primary={follower.followerId.username} />
+                </ListItem>
+              ))}
           </List>
         </DialogContentWrapper>
       </Dialog>
-      <Dialog open={followingOpen} onClose={toggleFollowing} aria-labelledby="following-dialog">
+      <Dialog
+        open={followingOpen}
+        onClose={toggleFollowing}
+        aria-labelledby="following-dialog"
+      >
         <DialogTitle>
           <DialogHeader>
-            <Typography variant='h6'>Following</Typography>
+            <Typography variant="h6">Following</Typography>
             <IconButton onClick={toggleFollowing}>
               <CloseIcon />
             </IconButton>
@@ -233,12 +301,21 @@ const UserProfileData = ({ userId }) => {
         </DialogTitle>
         <DialogContentWrapper>
           <List>
-            {followingList && followingList.map((following) => (
-              <ListItem key={following._id} sx={{ gap: 1 }}>
-                <Avatar src={following.followingId.profilePicture} alt={following.followingId.username} onClick={()=>{navigate(`/userProfile?userId=${following.followingId._id}`)}}/>
-                <ListItemText primary={following.followingId.username} />
-              </ListItem>
-            ))}
+            {followingList &&
+              followingList.map((following) => (
+                <ListItem key={following._id} sx={{ gap: 1 }}>
+                  <Avatar
+                    src={following.followingId.profilePicture}
+                    alt={following.followingId.username}
+                    onClick={() => {
+                      navigate(
+                        `/userProfile?userId=${following.followingId._id}`
+                      );
+                    }}
+                  />
+                  <ListItemText primary={following.followingId.username} />
+                </ListItem>
+              ))}
           </List>
         </DialogContentWrapper>
       </Dialog>

@@ -21,6 +21,7 @@ const GetUser = () => {
 
   const fetchUsers = async (username) => {
     setLoading(true);
+    console.log(username);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/api/users/getUserByUserName/${username}`

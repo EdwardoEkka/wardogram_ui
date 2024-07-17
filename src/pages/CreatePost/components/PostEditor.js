@@ -8,7 +8,9 @@ import {
   Typography,
   Box,
   TextField,
+  CircularProgress
 } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MediaEditor = ({ file }) => {
   const [filePreview, setFilePreview] = useState(null);
@@ -102,6 +104,8 @@ const MediaEditor = ({ file }) => {
 const FinalViewer = ({ file, caption }) => {
   const profile = useSelector((state) => state.auth.user);
   const [filePreview, setFilePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   useEffect(() => {
     const fileUrl = URL.createObjectURL(file);
@@ -135,6 +139,7 @@ const FinalViewer = ({ file, caption }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("caption", caption);
@@ -149,16 +154,17 @@ const FinalViewer = ({ file, caption }) => {
           },
         }
       );
+      setLoading(false);
+      setUploadSuccess(true);
       console.log("File uploaded successfully", response.data);
     } catch (error) {
+      setLoading(false);
       console.error("Error uploading file", error);
     }
   };
 
   return (
-    <Box
-    sx={{marginBottom:"20px"}}
-    >
+    <Box sx={{ marginBottom: "20px" }}>
       <Box
         sx={{
           width: "100%",
@@ -187,7 +193,7 @@ const FinalViewer = ({ file, caption }) => {
           {renderPreview()}
         </Box>
         <Container>
-        <Typography variant="body2">{caption}</Typography>
+          <Typography variant="body2">{caption}</Typography>
         </Container>
         <Button
           variant="contained"
@@ -201,9 +207,25 @@ const FinalViewer = ({ file, caption }) => {
               backgroundColor: "#007bb5",
             },
           }}
+          disabled={loading}
         >
-          Upload
+          {loading ? <CircularProgress size={24} /> : "Upload"}
         </Button>
+        {uploadSuccess && (
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CheckCircleIcon color="success" />
+            <Typography variant="body1" sx={{ ml: 1 }}>
+              Upload successful!
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

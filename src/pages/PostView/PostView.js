@@ -21,12 +21,21 @@ import {
   DialogContent,
   DialogTitle,
   Drawer,
+  ListItemIcon,
+  Divider,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import CloseIcon from "@mui/icons-material/Close";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import ShareIcon from "@mui/icons-material/Share";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ReportIcon from "@mui/icons-material/Report";
+import LinkIcon from "@mui/icons-material/Link";
+
+
 
 const PostView = () => {
   const currentPageUrl = window.location.href;
@@ -44,12 +53,18 @@ const PostView = () => {
   const auth = useSelector((state) => state.auth);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const handleEditDrawer = () => {
+    setIsEditOpen(!isEditOpen);
+  };
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
-  const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const fetchLikes = async () => {
     try {
@@ -103,10 +118,13 @@ const PostView = () => {
 
   const handleLike = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API_URL}/api/like/likePost`, {
-        userId: profile?._id,
-        postId,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/api/like/likePost`,
+        {
+          userId: profile?._id,
+          postId,
+        }
+      );
       fetchLikes();
     } catch (error) {
       console.error("Error liking post:", error);
@@ -115,11 +133,14 @@ const PostView = () => {
 
   const handleCommentSubmit = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API_URL}/api/comment/commentPost`, {
-        userId: profile?._id,
-        postId,
-        comment: newComment,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/api/comment/commentPost`,
+        {
+          userId: profile?._id,
+          postId,
+          comment: newComment,
+        }
+      );
       setNewComment("");
       fetchComments();
     } catch (error) {
@@ -169,8 +190,11 @@ const PostView = () => {
           <IconButton
             sx={{ zIndex: 100, marginLeft: "auto" }}
             onClick={handleDrawerToggle}
+            
           >
-            <MoreVertIcon sx={{ color: "black" }} />
+            <MoreVertIcon sx={{ color: "black" }} onClick={() => {
+                    handleEditDrawer();
+                  }}/>
           </IconButton>
         )}
       </Card>
@@ -234,7 +258,12 @@ const PostView = () => {
                 sx={{ zIndex: 100, marginLeft: "auto" }}
                 onClick={handleDrawerToggle}
               >
-                <MoreVertIcon sx={{ color: "black" }} />
+                <MoreVertIcon
+                  sx={{ color: "black" }}
+                  onClick={() => {
+                    handleEditDrawer();
+                  }}
+                />
               </IconButton>
             )}
           </Card>
@@ -278,6 +307,7 @@ const PostView = () => {
                     <Avatar
                       src={comment.userId.profilePicture}
                       alt={comment.userId.username}
+                      sx={{ marginRight: "10px" }}
                     />
                     <ListItemText
                       primary={comment.userId.username}
@@ -344,10 +374,11 @@ const PostView = () => {
                   <Avatar
                     src={comment.userId.profilePicture}
                     alt={comment.userId.username}
+                    sx={{ marginRight: "10px" }}
                   />
                   <ListItemText
-                    primary={comment.comment}
-                    secondary={`By: ${comment.userId.username}`}
+                    primary={comment.userId.username}
+                    secondary={comment.comment}
                   />
                 </ListItem>
               ))}
@@ -380,6 +411,44 @@ const PostView = () => {
           </Box>
         </DialogContent>
       </Dialog>
+      <Drawer anchor={matchesXS ? "bottom" : "right"} open={isEditOpen} onClose={handleEditDrawer}>
+      <List sx={{ width: 250 }}>
+          {isCurrentUser&&
+          
+        <ListItem button>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit" />
+        </ListItem>
+          }
+        <ListItem button>
+          <ListItemIcon>
+            <ShareIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Share" />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <DeleteIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Delete" />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <ReportIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Report" />
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemIcon>
+            <LinkIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Copy Link" />
+        </ListItem>
+      </List>
+    </Drawer>
     </Box>
   );
 };

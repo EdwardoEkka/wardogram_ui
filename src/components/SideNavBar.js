@@ -17,6 +17,11 @@ import GetUser from "./SearchUser";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SecurityIcon from '@mui/icons-material/Security';
+
 
 const drawerWidth = 240;
 const iconWidth = 80;
@@ -36,7 +41,7 @@ const SideNavBar = () => {
 
   const handleLogout = () => {
     // Dispatch logout action here
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: "LOGOUT" });
   };
 
   const handleSettingsClick = () => {
@@ -73,14 +78,12 @@ const SideNavBar = () => {
             display: "flex",
             flexDirection: isVerySmallScreen ? "row" : "column",
             padding: 0,
-            justifyContent: isVerySmallScreen
-              ? "space-around"
-              : "flex-start",
+            justifyContent: isVerySmallScreen ? "space-around" : "flex-start",
             height: "100%",
           }}
         >
           {[
-            { icon: <HomeIcon />, label: "Home", onClick: () => navigate('/') },
+            { icon: <HomeIcon />, label: "Home", onClick: () => navigate("/") },
             {
               icon: <SearchIcon />,
               label: "Search",
@@ -89,7 +92,7 @@ const SideNavBar = () => {
             {
               icon: <AddCircleIcon />,
               label: "Create",
-              onClick: () => navigate('/create-post'),
+              onClick: () => navigate("/create-post"),
             },
             {
               icon: <PersonIcon />,
@@ -149,12 +152,8 @@ const SideNavBar = () => {
               height: isVerySmallScreen ? "100vh" : "100%",
               width: isVerySmallScreen ? "100%" : 320,
               boxShadow: "none",
-              borderRight: isVerySmallScreen
-                ? "none"
-                : "1px solid #e2e3e5",
-              borderBottom: isVerySmallScreen
-                ? "1px solid #e2e3e5"
-                : "none",
+              borderRight: isVerySmallScreen ? "none" : "1px solid #e2e3e5",
+              borderBottom: isVerySmallScreen ? "1px solid #e2e3e5" : "none",
               background: "#fff",
               zIndex: 900,
             }}
@@ -166,10 +165,31 @@ const SideNavBar = () => {
           <Drawer
             anchor="right"
             open={isSettingsOpen}
-            onClose={handleSettingsClick} 
+            onClose={handleSettingsClick}
           >
             <List>
+              <ListItem>
+                <ListItemIcon>
+                  <AccountCircleIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Accounts" />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AccessibilityIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Accessibilty" />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <SecurityIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Security" />
+              </ListItem>
               <ListItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
                 <ListItemText primary="Logout" />
               </ListItem>
             </List>

@@ -24,7 +24,7 @@ const Post = ({ post }) => {
         <Typography variant="body2" sx={{cursor:"pointer"}} onClick={()=>{navigate(`/post-view?postId=${post._id}`)}}>{likes.length} likes</Typography>
         <Typography variant="body2" sx={{cursor:"pointer"}} onClick={()=>{navigate(`/post-view?postId=${post._id}`)}}>{comments.length} comments</Typography>
       </Box>
-      <Typography variant="body2" sx={{ marginTop: "8px", color: "gray" }}>
+      <Typography variant="body2" sx={{ marginTop: "8px"}}>
         {new Date(createdAt).toLocaleDateString()}
       </Typography>
     </Box>

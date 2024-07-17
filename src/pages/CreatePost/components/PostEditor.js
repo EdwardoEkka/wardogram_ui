@@ -75,7 +75,6 @@ const MediaEditor = ({ file }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "#f9f9f9",
             }}
           >
             {renderPreview()}
@@ -87,10 +86,6 @@ const MediaEditor = ({ file }) => {
               mt: 2,
               width: "100%",
               borderRadius: 0,
-              backgroundColor: "#0095f6",
-              "&:hover": {
-                backgroundColor: "#007bb5",
-              },
             }}
           >
             Next
@@ -187,7 +182,6 @@ const FinalViewer = ({ file, caption }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#f9f9f9",
           }}
         >
           {renderPreview()}
@@ -202,10 +196,6 @@ const FinalViewer = ({ file, caption }) => {
             mt: 2,
             width: "100%",
             borderRadius: 0,
-            backgroundColor: "#0095f6",
-            "&:hover": {
-              backgroundColor: "#007bb5",
-            },
           }}
           disabled={loading}
         >
@@ -309,7 +299,7 @@ const PostEditor = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 4 }}>
+    <Container maxWidth="sm">
       {next ? (
         <Box textAlign="center">
           <Button variant="contained" component="label">

@@ -8,7 +8,8 @@ import {
   TextField,
   Button,
   ListItem,
-  ListItemText
+  ListItemText,
+  Paper
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +40,7 @@ const GetUser = () => {
   };
 
   return (
-    <Box style={{ padding: "20px", width: "100%", height: "100%" }}>
+    <Paper style={{ padding: "20px", width: "100%", height: "100%" }}>
       <div>
         <TextField
           onChange={handleSearchName}
@@ -77,7 +78,7 @@ const GetUser = () => {
           </Box>
         )}
       </div>
-    </Box>
+    </Paper>
   );
 };
 

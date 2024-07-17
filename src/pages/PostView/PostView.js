@@ -23,6 +23,7 @@ import {
   Drawer,
   ListItemIcon,
   Divider,
+  Paper,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -163,7 +164,7 @@ const PostView = () => {
   const isVideo = post.media.contentType.startsWith("video");
 
   return (
-    <Box
+    <Paper
       sx={{
         display: "flex",
         flexDirection: isLargeScreen ? "row" : "column",
@@ -192,7 +193,7 @@ const PostView = () => {
             onClick={handleDrawerToggle}
             
           >
-            <MoreVertIcon sx={{ color: "black" }} onClick={() => {
+            <MoreVertIcon  onClick={() => {
                     handleEditDrawer();
                   }}/>
           </IconButton>
@@ -259,7 +260,6 @@ const PostView = () => {
                 onClick={handleDrawerToggle}
               >
                 <MoreVertIcon
-                  sx={{ color: "black" }}
                   onClick={() => {
                     handleEditDrawer();
                   }}
@@ -270,7 +270,6 @@ const PostView = () => {
           <Box>
             <Typography
               variant="body2"
-              color="textSecondary"
               component="p"
               sx={{ marginBottom: 2 }}
             >
@@ -324,7 +323,6 @@ const PostView = () => {
             sx={{
               position: "sticky",
               bottom: 0,
-              backgroundColor: "white",
               padding: 2,
               display: "flex",
               gap: 1,
@@ -339,7 +337,6 @@ const PostView = () => {
             />
             <Button
               variant="contained"
-              color="primary"
               onClick={handleCommentSubmit}
             >
               Post
@@ -388,7 +385,6 @@ const PostView = () => {
             sx={{
               position: "sticky",
               bottom: 0,
-              backgroundColor: "white",
               padding: 2,
               display: "flex",
               gap: 1,
@@ -403,7 +399,6 @@ const PostView = () => {
             />
             <Button
               variant="contained"
-              color="primary"
               onClick={handleCommentSubmit}
             >
               Post
@@ -449,7 +444,7 @@ const PostView = () => {
         </ListItem>
       </List>
     </Drawer>
-    </Box>
+    </Paper>
   );
 };
 

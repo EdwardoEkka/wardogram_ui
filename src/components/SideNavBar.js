@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Drawer,
   List,
@@ -6,22 +6,30 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Button,
+  IconButton,
+  Typography
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PersonIcon from "@mui/icons-material/Person";
-import { useMediaQuery } from "@mui/material";
-import GetUser from "./SearchUser";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SecurityIcon from '@mui/icons-material/Security';
-
+import CloseIcon from '@mui/icons-material/Close';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import { useMediaQuery } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import GetUser from "./SearchUser";
 
 const drawerWidth = 240;
 const iconWidth = 80;
@@ -30,23 +38,32 @@ const SideNavBar = () => {
   const isSmallScreen = useMediaQuery("(max-width:768px)");
   const isVerySmallScreen = useMediaQuery("(max-width:600px)");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State for settings drawer
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAccessibilityDialogOpen, setIsAccessibilityDialogOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const mode=useSelector((state)=>state.mode.darkMode);
 
-  const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  const handleSearchClick = useCallback(() => {
+    setIsSearchOpen((prev) => !prev);
+  }, []);
 
-  const handleLogout = () => {
-    // Dispatch logout action here
+  const handleLogout = useCallback(() => {
     dispatch({ type: "LOGOUT" });
-  };
+  }, [dispatch]);
 
-  const handleSettingsClick = () => {
-    setIsSettingsOpen(!isSettingsOpen); // Toggle settings drawer
-  };
+  const handleSettingsClick = useCallback(() => {
+    setIsSettingsOpen((prev) => !prev);
+  }, []);
+
+  const handleAccessibilityClick = useCallback(() => {
+    setIsAccessibilityDialogOpen(true);
+  }, []);
+
+  const handleCloseAccessibilityDialog = useCallback(() => {
+    setIsAccessibilityDialogOpen(false);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -102,7 +119,7 @@ const SideNavBar = () => {
             {
               icon: <SettingsIcon />,
               label: "Settings",
-              onClick: handleSettingsClick, // Toggle settings drawer
+              onClick: handleSettingsClick,
             },
           ].map(({ icon, label, onClick }, index) => (
             <ListItem
@@ -170,23 +187,23 @@ const SideNavBar = () => {
             <List>
               <ListItem>
                 <ListItemIcon>
-                  <AccountCircleIcon/>
+                  <AccountCircleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Accounts" />
               </ListItem>
-              <ListItem>
+              <ListItem button onClick={handleAccessibilityClick}>
                 <ListItemIcon>
-                  <AccessibilityIcon/>
+                  <AccessibilityIcon />
                 </ListItemIcon>
-                <ListItemText primary="Accessibilty" />
+                <ListItemText primary="Accessibility" />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
-                  <SecurityIcon/>
+                  <SecurityIcon />
                 </ListItemIcon>
                 <ListItemText primary="Security" />
               </ListItem>
-              <ListItem onClick={handleLogout}>
+              <ListItem button onClick={handleLogout}>
                 <ListItemIcon>
                   <ExitToAppIcon />
                 </ListItemIcon>
@@ -196,6 +213,21 @@ const SideNavBar = () => {
           </Drawer>
         )}
       </AnimatePresence>
+      <Dialog
+        open={isAccessibilityDialogOpen}
+        onClose={handleCloseAccessibilityDialog}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle>
+          <Typography variant="h6">Accessibility Options</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Button onClick={() => { dispatch({ type: 'BACKGROUND_MODE' }); }} startIcon={<Brightness4Icon />}>
+            {mode?"Light Mode":"Dark Mode"}
+          </Button>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

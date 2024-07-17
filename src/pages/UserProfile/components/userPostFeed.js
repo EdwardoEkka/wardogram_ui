@@ -43,7 +43,7 @@ const RenderData = ({ data,isCurrentUser }) => {
         if (isImage || isVideo) {
           return (
             <Grid item key={index} sx={{ width: "33.33%", height: { xs: "150px", sm: "200px", md: "300px" }, cursor: "pointer" }}>
-              <Card sx={{ height: "100%", borderRadius: 0, backgroundColor: "black",position:"relative"}} onClick={() => { navigate(`/post-view?postId=${dataItem._id}`) }}>
+              <Card sx={{ height: "100%", borderRadius: 0,position:"relative"}} onClick={() => { navigate(`/post-view?postId=${dataItem._id}`) }}>
 
                 {isImage ? (
                   <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
@@ -68,13 +68,12 @@ const RenderData = ({ data,isCurrentUser }) => {
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         fontSize: "3rem",
-                        color: "white",
                       }}
                     />
                   </Box>
                 )}
                 <CardContent>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2">
                     {dataItem.file_name}
                   </Typography>
                 </CardContent>

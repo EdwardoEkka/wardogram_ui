@@ -6,6 +6,7 @@ import {
   Grid,
   Avatar,
   CircularProgress,
+  Paper,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -103,7 +104,7 @@ const UpdateProfileForm = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', mt: '20px' }}>
+    <Paper sx={{ display: 'flex', justifyContent: 'center', minHeight: '100vh'}}>
       <form onSubmit={handleSubmit} style={{margin:"20px", maxWidth: '500px', width: '100%' }}>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
@@ -167,7 +168,6 @@ const UpdateProfileForm = () => {
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               disabled={loading || !formData.username}
             >
               Update
@@ -175,7 +175,7 @@ const UpdateProfileForm = () => {
           </Grid>
         </Grid>
       </form>
-    </Box>
+    </Paper>
   );
 };
 

@@ -1,12 +1,12 @@
 import React from "react";
 import PostEditor from "./components/PostEditor";
-
+import { Box } from "@mui/material";
 
 const CreatePost=()=>{
     return(
-      <div>
+      <Box sx={{mt:5}}>
             <PostEditor/>
-        </div>
+        </Box>
     )
 }
 

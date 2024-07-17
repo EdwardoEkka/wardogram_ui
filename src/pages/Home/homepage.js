@@ -53,7 +53,7 @@ const Homepage = () => {
   }, [followings]);
 
   return (
-    <Box sx={{ padding: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <Box sx={{ padding: "16px", display: "flex", alignItems: "center", justifyContent: "center",minHeight:"100vh"}}>
       <Box sx={{ marginTop: "16px", maxWidth: 600 }}>
         {posts.length === 0 ? (
           <Typography variant="h6">No posts available</Typography>

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Box } from "@mui/material";
+import { Paper,Box} from "@mui/material";
 import { BrowserRouter as Router, Route, Routes, Outlet } from "react-router-dom";
 import SignupForm from "./pages/Sign Up/Sign Up";
 import SigninForm from "./pages/Sign In/Sign In";
@@ -12,12 +12,28 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SideNavBar from "./components/SideNavBar";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated"; // Import the new component
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector} from "react-redux";
 import { fetchCurrentUser } from "./store/actions/authActions";
+import { createTheme, ThemeProvider} from '@mui/material';
+
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+    // Customize other theme options
+  },
+});
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    // Customize other theme options
+  },
+});
+
 
 function App() {
   const dispatch = useDispatch();
-
+  const darkMode = useSelector((state) => state.mode.darkMode);
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -28,18 +44,20 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Box className="App">
+    <Paper className="App" sx={{minHeight:"100vh"}}>
       <Router>
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route 
               element={
-                <Box sx={{ display: { xs: "block", sm: "flex" } }}>
+                <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+                <Paper sx={{ display: { xs: "block", sm: "flex" } }}>
                   <SideNavBar />
-                  <Box sx={{ width: "100%", marginBottom: { xs: "60px", sm: "0px" } }}>
+                  <Box sx={{ width: "100%", marginBottom: { xs: "60px", sm: "0px" }, minHeight: '100vh' }}>
                     <Outlet />
                   </Box>
-                </Box>
+                </Paper>
+              </ThemeProvider>
               }
             >
               <Route path="/" element={<Homepage />} />
@@ -50,8 +68,8 @@ function App() {
             </Route>
           </Route>
           <Route 
-            path="/signup" 
-            element={
+          path="/signup" 
+          element={
               <RedirectIfAuthenticated>
                 <SignupForm />
               </RedirectIfAuthenticated>
@@ -67,7 +85,7 @@ function App() {
           />
         </Routes>
       </Router>
-    </Box>
+    </Paper>
   );
 }
 

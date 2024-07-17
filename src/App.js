@@ -53,7 +53,7 @@ function App() {
                 <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
                 <Paper sx={{ display: { xs: "block", sm: "flex" } }}>
                   <SideNavBar />
-                  <Box sx={{ width: "100%", marginBottom: { xs: "60px", sm: "0px" }, minHeight: '100vh' }}>
+                  <Box sx={{ width: "100%", marginBottom: { xs: "56px", sm: "0px" }, minHeight: '100vh' }}>
                     <Outlet />
                   </Box>
                 </Paper>

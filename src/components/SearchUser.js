@@ -40,7 +40,7 @@ const GetUser = () => {
   };
 
   return (
-    <Paper style={{ padding: "20px", width: "100%", height: "100%", border:"none",boxShadow:"none",borderRadius:"none" }}>
+    <Paper style={{ padding: "20px", width: "100%", height: "100%", border:"none",boxShadow:"none",borderRadius:0 }}>
       <div>
         <TextField
           onChange={handleSearchName}

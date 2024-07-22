@@ -6,6 +6,7 @@ import { login } from "../../store/actions/authActions";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './SignIn.css';
+import { CircularProgress } from "@mui/material";
 
 const SigninForm = () => {
   const dispatch = useDispatch();
@@ -15,13 +16,15 @@ const SigninForm = () => {
     <div>
       <div className="d-flex  flex-row">
         <div className="col-md-8 vh-100 bg-success d-flex align-items-center justify-content-center">
-          <img src="./social_media.png" className="col-8" alt="social">
+          <img src="./social_media.png" className="col-7" alt="social">
           </img>
         </div>
-      <div className="col-md-4 p-5 p-md-3 col-12 d-flex flex-column mw-600 justify-content-center" >
+      <div className="col-md-4 p-5 p-md-3 col-12 d-flex flex-column justify-content-center" >
 
-      <div className="">
+      <div className="w-xs-50">
         <h2 className="signin-title mb-4 text-center title-web">Wardogram</h2>
+        <div className="border border-secondary p-3 p-lg-5 rounded">
+        <h2 className="text-center">Sign-In</h2>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={Yup.object({
@@ -32,9 +35,13 @@ const SigninForm = () => {
               .min(6, "Password must be at least 6 characters")
               .required("Required"),
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            dispatch(login(values.email, values.password));
-            setSubmitting(false);
+          onSubmit={async (values, { setSubmitting }) => {
+            setSubmitting(true);
+            try {
+              await dispatch(login(values.email, values.password));
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({ isSubmitting }) => (
@@ -68,7 +75,19 @@ const SigninForm = () => {
               {authError && typeof authError === "string" && (
                 <div className="text-danger mb-3">{authError}</div>
               )}
-              <button className="btn btn-primary">Submit</button>
+              <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn btn-primary"
+                    >
+                      {isSubmitting ? (
+                        <div style={{display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"row"}}>
+                          Signing in... <CircularProgress size={24} sx={{color:"black"}}/>
+                        </div>
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
               <div className="text-center mt-3">
                 <span>Don't have an account? </span>
                 <Link to="/signup" className="text-primary">
@@ -78,6 +97,7 @@ const SigninForm = () => {
             </Form>
           )}
         </Formik>
+        </div>
       </div>
       </div>
       </div>

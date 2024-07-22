@@ -174,7 +174,7 @@ const PostView = () => {
         padding: 2,
         border:"none",
         boxShadow:"none",
-        borderRadius:"none"
+        
       }}
     >
       <Card

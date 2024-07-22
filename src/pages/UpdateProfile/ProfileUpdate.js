@@ -104,7 +104,7 @@ const UpdateProfileForm = () => {
   };
 
   return (
-    <Paper sx={{ display: 'flex', justifyContent: 'center', minHeight: '100vh'}}>
+    <Paper sx={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', border:"none",boxShadow:"none",borderRadius:"none"}}>
       <form onSubmit={handleSubmit} style={{margin:"20px", maxWidth: '500px', width: '100%' }}>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>

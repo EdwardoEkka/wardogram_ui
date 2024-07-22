@@ -44,14 +44,14 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Paper className="App" sx={{minHeight:"100vh"}}>
+    <Paper className="App" sx={{minHeight:"100vh", border:"none",boxShadow:"none",borderRadius:"none"}}>
       <Router>
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route 
               element={
                 <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-                <Paper sx={{ display: { xs: "block", sm: "flex" } }}>
+                <Paper sx={{ display: { xs: "block", sm: "flex" }, border:"none",boxShadow:"none",borderRadius:"none"}}>
                   <SideNavBar />
                   <Box sx={{ width: "100%", marginBottom: { xs: "56px", sm: "0px" }, minHeight: '100vh' }}>
                     <Outlet />

@@ -1,0 +1,10 @@
+/* Add this to the CSS file or within a <style> tag in the <head> of the HTML file */
+@font-face {
+    font-family: 'Night Pumpkind';
+    src: url('../../NightPumpkind-1GpGv.ttf') format('truetype');
+}
+
+.title-web{
+    font-family: 'Night Pumpkind', sans-serif;
+    font-size: 48px;
+}

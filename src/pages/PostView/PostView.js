@@ -172,6 +172,9 @@ const PostView = () => {
         justifyContent: "center",
         minHeight: "100vh",
         padding: 2,
+        border:"none",
+        boxShadow:"none",
+        borderRadius:"none"
       }}
     >
       <Card
